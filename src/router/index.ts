@@ -43,6 +43,15 @@ export const configRoutes = {
                         icon: 'already',
                     },
                 },
+                {
+                    path: '/log-lottery/config/person/reserved',
+                    name: 'ReservedPerson',
+                    component: () => import('@/views/Config/Person/PersonReserved/index.vue'),
+                    meta: {
+                        title: '内定管理',
+                        icon: 'reserved',
+                    },
+                },
                 // {
                 //     path:'other',
                 //     name:'OtherPersonConfig',

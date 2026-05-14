@@ -125,28 +125,6 @@ export function useViewModel() {
                 symbol.className = 'card-name card-avatar-name'
             element.appendChild(symbol)
 
-            const detail = document.createElement('div')
-            detail.className = 'card-detail'
-            detail.innerHTML = `${tableData.value[i].department}<br/>${tableData.value[i].identity}`
-            if (isShowAvatar.value)
-                detail.style.display = 'none'
-            element.appendChild(detail)
-
-            if (isShowAvatar.value) {
-                const avatar = document.createElement('img')
-                avatar.className = 'card-avatar'
-                avatar.src = tableData.value[i].avatar
-                avatar.alt = 'avatar'
-                avatar.style.width = '140px'
-                avatar.style.height = '140px'
-                element.appendChild(avatar)
-            }
-            else {
-                const avatarEmpty = document.createElement('div')
-                avatarEmpty.style.display = 'none'
-                element.appendChild(avatarEmpty)
-            }
-
             element = useElementStyle({
                 element,
                 person: tableData.value[i],
@@ -499,6 +477,10 @@ export function useViewModel() {
         }
         // personPool.value = currentPrize.value.isAll ? notThisPrizePersonList.value : notPersonList.value
         personPool.value = currentPrize.value.isAll ? [...notThisPrizePersonList.value] : [...notPersonList.value]
+        
+        // 检查当前奖品是否有内定人员
+        const reservedPersons = personPool.value.filter(person => person.reservedPrizeId === currentPrize.value.id)
+        
         // 验证抽奖人数是否还够
         if (personPool.value.length < currentPrize.value.count - currentPrize.value.isUsedCount) {
             toast.open({
@@ -524,19 +506,42 @@ export function useViewModel() {
                 }
             }
         }
-        luckyCount.value = leftover < luckyCount.value ? leftover : luckyCount.value
+        
+        // 如果没有剩余名额，直接返回
+        if (leftover <= 0) {
+            toast.open({
+                message: i18n.global.t('error.personIsAllDone'),
+                type: 'warning',
+                position: 'top-right',
+                duration: 10000,
+            })
+            return
+        }
+        
         // 重构抽奖函数
-        luckyTargets.value = getRandomElements(personPool.value, luckyCount.value)
-        luckyTargets.value.forEach((item) => {
-            const index = personPool.value.findIndex(person => person.id === item.id)
+        // 如果有内定人员，优先抽取内定人员
+        if (reservedPersons.length > 0) {
+            // 取第一个内定人员
+            luckyTargets.value = [reservedPersons[0]]
+            
+            // 从人员池中移除已内定的人员
+            const index = personPool.value.findIndex(p => p.id === reservedPersons[0].id)
             if (index > -1) {
                 personPool.value.splice(index, 1)
             }
-        })
+        } else {
+            // 没有内定人员，随机抽取1个人
+            luckyTargets.value = getRandomElements(personPool.value, 1)
+            luckyTargets.value.forEach((item) => {
+                const index = personPool.value.findIndex(person => person.id === item.id)
+                if (index > -1) {
+                    personPool.value.splice(index, 1)
+                }
+            })
+        }
 
         toast.open({
-            // message: `现在抽取${currentPrize.value.name} ${leftover}人`,
-            message: i18n.global.t('error.startDraw', { count: currentPrize.value.name, leftover }),
+            message: i18n.global.t('error.startDraw', { count: currentPrize.value.name, leftover: 1 }),
             type: 'default',
             position: 'top-right',
             duration: 8000,

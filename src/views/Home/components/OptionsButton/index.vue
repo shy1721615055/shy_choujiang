@@ -57,19 +57,19 @@ const { t } = useI18n()
         </button>
       </div>
 
-      <div class="start">
-        <button class="btn-stars btn-cancel" @click="quitLottery">
-          <strong>{{ t('button.cancel') }}</strong>
-          <div id="container-stars">
-            <div id="stars" />
-          </div>
+      <!-- Deleted:<div class="start"> -->
+      <!-- Deleted:<button class="btn-stars btn-cancel" @click="quitLottery"> -->
+      <!-- Deleted:<strong>{{ t('button.cancel') }}</strong> -->
+      <!-- Deleted:<div id="container-stars"> -->
+      <!-- Deleted:<div id="stars" /> -->
+      <!-- Deleted:</div> -->
 
-          <div id="glow">
-            <div class="circle" />
-            <div class="circle" />
-          </div>
-        </button>
-      </div>
+      <!-- Deleted:<div id="glow"> -->
+      <!-- Deleted:<div class="circle" /> -->
+      <!-- Deleted:<div class="circle" /> -->
+      <!-- Deleted:</div> -->
+      <!-- Deleted:</button> -->
+      <!-- Deleted:</div> -->
     </div>
   </div>
 </template>

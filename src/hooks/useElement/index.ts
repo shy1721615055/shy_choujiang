@@ -60,13 +60,6 @@ export function useElementStyle(props: IUseElementStyle) {
         element.children[1].textContent = person.name
     }
 
-    element.children[2].style.fontSize = `${textSize * scale * 0.5}px`
-    // 设置部门和身份的默认值
-    element.children[2].innerHTML = ''
-    if (person.department || person.identity) {
-        element.children[2].innerHTML = `${person.department ? person.department : ''}<br/>${person.identity ? person.identity : ''}`
-    }
-    element.children[3].src = person.avatar
     return element
 }
 interface CardRule {
