@@ -58,7 +58,7 @@ jobs:
           publish_branch: gh-pages
           force_orphan: true
 
-  publish-tauri:
+  publish-tauri-windows:
     permissions:
       contents: write
     runs-on: windows-latest
@@ -92,7 +92,7 @@ jobs:
       - name: Install dependency fast-glob
         run: pnpm add fast-glob -D
 
-      - name: Build the app
+      - name: Build the app for Windows
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -100,13 +100,61 @@ jobs:
           tagName: ${{ github.ref_name }}
           releaseName: 'Release ${{ github.ref_name }}'
           releaseBody: See the assets to download this version and install.
-          releaseDraft: true
+          releaseDraft: false
           prerelease: false
-          run: pnpm tauri build
+
+  publish-tauri-macos:
+    permissions:
+      contents: write
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: ./src-tauri -> target
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.x
+          cache: pnpm
+
+      - name: Install frontend dependencies
+        run: pnpm install
+
+      - name: Install dependency fast-glob
+        run: pnpm add fast-glob -D
+
+      - name: Build the app for macOS
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: 'Release ${{ github.ref_name }}'
+          releaseBody: See the assets to download this version and install.
+          releaseDraft: false
+          prerelease: false
 
   release:
-    needs: [build-web, publish-tauri]
+    needs: [build-web, publish-tauri-windows, publish-tauri-macos]
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -118,12 +166,9 @@ jobs:
         with:
           name: web-build
 
-      - name: Create Release
+      - name: Upload to Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             dist.zip
-          name: 'Release ${{ github.ref_name }}'
-          draft: true
-          prerelease: false
-          generate_release_notes: true
+          tag_name: ${{ github.ref_name }}
