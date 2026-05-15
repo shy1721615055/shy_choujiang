@@ -4,16 +4,16 @@ import i18n from '@/locales/i18n'
 import Home from '@/views/Home/index.vue'
 
 export const configRoutes = {
-    path: '/config',
+    path: '/log-lottery/config',
     name: 'Config',
     component: () => import('@/views/Config/index.vue'),
     children: [
         {
             path: '',
-            redirect: '/config/person',
+            redirect: '/log-lottery/config/person',
         },
         {
-            path: '/config/person',
+            path: '/log-lottery/config/person',
             name: 'PersonConfig',
             component: () => import('@/views/Config/Person/index.vue'),
             meta: {
@@ -23,10 +23,10 @@ export const configRoutes = {
             children: [
                 {
                     path: '',
-                    redirect: '/config/person/all',
+                    redirect: '/log-lottery/config/person/all',
                 },
                 {
-                    path: '/config/person/all',
+                    path: '/log-lottery/config/person/all',
                     name: 'AllPersonConfig',
                     component: () => import('@/views/Config/Person/PersonAll/index.vue'),
                     meta: {
@@ -35,7 +35,7 @@ export const configRoutes = {
                     },
                 },
                 {
-                    path: '/config/person/already',
+                    path: '/log-lottery/config/person/already',
                     name: 'AlreadyPerson',
                     component: () => import('@/views/Config/Person/PersonAlready/index.vue'),
                     meta: {
@@ -44,7 +44,7 @@ export const configRoutes = {
                     },
                 },
                 {
-                    path: '/config/person/reserved',
+                    path: '/log-lottery/config/person/reserved',
                     name: 'ReservedPerson',
                     component: () => import('@/views/Config/Person/PersonReserved/index.vue'),
                     meta: {
@@ -64,7 +64,7 @@ export const configRoutes = {
             ],
         },
         {
-            path: '/config/prize',
+            path: '/log-lottery/config/prize',
             name: 'PrizeConfig',
             component: () => import('@/views/Config/Prize/PrizeConfig.vue'),
             meta: {
@@ -73,16 +73,16 @@ export const configRoutes = {
             },
         },
         {
-            path: '/config/global',
+            path: '/log-lottery/config/global',
             name: 'GlobalConfig',
-            redirect: '/config/global/all',
+            redirect: '/log-lottery/config/global/all',
             meta: {
                 title: i18n.global.t('sidebar.globalSetting'),
                 icon: 'global',
             },
             children: [
                 {
-                    path: '/config/global/face',
+                    path: '/log-lottery/config/global/face',
                     name: 'FaceConfig',
                     component: () => import('@/views/Config/Global/FaceConfig/index.vue'),
                     meta: {
@@ -91,7 +91,7 @@ export const configRoutes = {
                     },
                 },
                 {
-                    path: '/config/global/image',
+                    path: '/log-lottery/config/global/image',
                     name: 'ImageConfig',
                     component: () => import('@/views/Config/Global/ImageConfig/index.vue'),
                     meta: {
@@ -100,7 +100,7 @@ export const configRoutes = {
                     },
                 },
                 {
-                    path: '/config/global/music',
+                    path: '/log-lottery/config/global/music',
                     name: 'MusicConfig',
                     component: () => import('@/views/Config/Global/MusicConfig/index.vue'),
                     meta: {
@@ -111,7 +111,7 @@ export const configRoutes = {
             ],
         },
         {
-            path: '/config/server',
+            path: '/log-lottery/config/server',
             name: 'Server',
             component: () => import('@/views/Config/Server/index.vue'),
             meta: {
@@ -121,7 +121,7 @@ export const configRoutes = {
             },
         },
         {
-            path: '/config/readme',
+            path: '/log-lottery/config/readme',
             name: 'Readme',
             component: () => import('@/views/Config/Readme/index.vue'),
             meta: {
@@ -134,25 +134,25 @@ export const configRoutes = {
 const routes = [
     {
         path: '/',
-        redirect: '/home',
+        redirect: '/log-lottery',
     },
     {
-        path: '/',
+        path: '/log-lottery',
         component: Layout,
-        redirect: '/home',
+        redirect: '/log-lottery/home',
         children: [
             {
-                path: '/home',
+                path: '/log-lottery/home',
                 name: 'Home',
                 component: Home,
             },
             {
-                path: '/demo',
+                path: '/log-lottery/demo',
                 name: 'Demo',
                 component: () => import('@/views/Demo/index.vue'),
             },
             {
-                path: '/mobile',
+                path: '/log-lottery/mobile',
                 name: 'Mobile',
                 meta: {
                     isMobile: true,
