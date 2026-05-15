@@ -1,0 +1,1 @@
+import{a as r}from"./chunk-UHLw64aI.js";import{aB as a,a2 as o,aN as s}from"./chunk-Ckoggtuh.js";const t=r({},[["render",function(r,t){const n=s("router-view");return a(),o(n)}]]);export{t as default};
