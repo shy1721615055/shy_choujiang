@@ -107,6 +107,10 @@ jobs:
   release:
     needs: [build-web, publish-tauri]
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -118,12 +122,9 @@ jobs:
         with:
           name: web-build
 
-      - name: Create Release
+      - name: Upload to Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             dist.zip
-          name: 'Release ${{ github.ref_name }}'
-          draft: true
-          prerelease: false
-          generate_release_notes: true
+          tag_name: ${{ github.ref_name }}
