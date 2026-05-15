@@ -48,7 +48,7 @@ export const configRoutes = {
                     name: 'ReservedPerson',
                     component: () => import('@/views/Config/Person/PersonReserved/index.vue'),
                     meta: {
-                        title: '内定管理',
+                        title: '人员奖品管理',
                         icon: 'reserved',
                     },
                 },

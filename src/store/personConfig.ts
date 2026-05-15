@@ -32,9 +32,9 @@ export const usePersonConfig = defineStore('person', () => {
     })
 
     // 获取已中奖人员名单
-    const getAlreadyPersonList = computed(() => {
+        const getAlreadyPersonList = computed(() => {
         return personConfig.value.allPersonList.filter((item: IPersonConfig) => {
-            return item.isWin === true
+            return item.prizeName && item.prizeName.length > 0
         })
     })
     // 获取中奖人员详情
@@ -56,7 +56,6 @@ export const usePersonConfig = defineStore('person', () => {
         personList.forEach((item: IPersonConfig) => {
             personConfig.value.allPersonList.push(item)
         })
-        personDb.setAllData('allPersonList', personList)
     }
 
     // 设置内定人员
@@ -73,7 +72,6 @@ export const usePersonConfig = defineStore('person', () => {
             // 强制触发响应式更新
             personConfig.value.allPersonList = [...personConfig.value.allPersonList]
             
-            personDb.updateData('allPersonList', toRaw(updatedPerson))
             console.log('设置内定成功:', updatedPerson.uid, '->', prizeId)
         } else {
             console.warn('未找到人员 ID:', personId)
@@ -103,9 +101,6 @@ export const usePersonConfig = defineStore('person', () => {
             ...toRaw(person),
             reservedPrizeId: null,
         }))
-        const allPersonListRaw = toRaw(personConfig.value.allPersonList)
-        personDb.deleteAll('allPersonList')
-        personDb.setAllData('allPersonList', allPersonListRaw)
     }
     // 添加数据
     function addOnePerson(person: IPersonConfig[]) {
@@ -118,7 +113,6 @@ export const usePersonConfig = defineStore('person', () => {
         }
         person.forEach((item: IPersonConfig) => {
             personConfig.value.allPersonList.push(item)
-            personDb.setData('allPersonList', item)
         })
     }
     // 添加已中奖人员（不标记为已中奖，允许重复抽取）
@@ -140,8 +134,6 @@ export const usePersonConfig = defineStore('person', () => {
                 return item
             })
             personConfig.value.alreadyPersonList.push(person)
-            personDb.updateData('allPersonList', toRaw(person))
-            personDb.setData('alreadyPersonList', toRaw(person))
         })
     }
     // 从已中奖移动到未中奖
@@ -156,7 +148,6 @@ export const usePersonConfig = defineStore('person', () => {
                 personConfig.value.allPersonList[i].prizeName = []
                 personConfig.value.allPersonList[i].prizeTime = []
                 personConfig.value.allPersonList[i].prizeId = []
-                personDb.updateData('allPersonList', toRaw(personConfig.value.allPersonList[i]))
                 break
             }
         }
@@ -166,7 +157,6 @@ export const usePersonConfig = defineStore('person', () => {
                 item.id !== person.id,
             )
         }
-        personDb.deleteData('alreadyPersonList', person)
     }
     // 删除指定人员
     function deletePerson(person: IPersonConfig) {
@@ -175,24 +165,18 @@ export const usePersonConfig = defineStore('person', () => {
             const alreadyPersonListRaw = toRaw(personConfig.value.alreadyPersonList)
             personConfig.value.allPersonList = allPersonListRaw.filter((item: IPersonConfig) => item.id !== person.id)
             personConfig.value.alreadyPersonList = alreadyPersonListRaw.filter((item: IPersonConfig) => item.id !== person.id)
-            personDb.deleteData('allPersonList', person)
-            personDb.deleteData('alreadyPersonList', person)
         }
     }
     // 删除所有人员
     function deleteAllPerson() {
         personConfig.value.allPersonList = []
         personConfig.value.alreadyPersonList = []
-        personDb.deleteAll('allPersonList')
-        personDb.deleteAll('alreadyPersonList')
     }
 
     // 删除所有人员
     function resetPerson() {
         personConfig.value.allPersonList = []
         personConfig.value.alreadyPersonList = []
-        personDb.deleteAll('allPersonList')
-        personDb.deleteAll('alreadyPersonList')
     }
     // 重置已中奖人员
     function resetAlreadyPerson() {
@@ -204,10 +188,6 @@ export const usePersonConfig = defineStore('person', () => {
             item.prizeId = []
         })
         personConfig.value.alreadyPersonList = []
-        const allPersonListRaw = toRaw(personConfig.value.allPersonList)
-        personDb.deleteAll('allPersonList')
-        personDb.setAllData('allPersonList', allPersonListRaw)
-        personDb.deleteAll('alreadyPersonList')
     }
     function setDefaultPersonList() {
         personConfig.value.allPersonList = defaultPersonList.map((item: any) => {
@@ -215,8 +195,6 @@ export const usePersonConfig = defineStore('person', () => {
             return item
         })
         personConfig.value.alreadyPersonList = []
-        personDb.setAllData('allPersonList', defaultPersonList)
-        personDb.deleteAll('alreadyPersonList')
     }
     // 重置所有配置
     function reset() {
@@ -224,8 +202,6 @@ export const usePersonConfig = defineStore('person', () => {
             allPersonList: [] as IPersonConfig[],
             alreadyPersonList: [] as IPersonConfig[],
         }
-        personDb.deleteAll('allPersonList')
-        personDb.deleteAll('alreadyPersonList')
     }
     return {
         personConfig,

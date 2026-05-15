@@ -11,11 +11,11 @@ const generateDefaultPersonList = (): IPersonConfigWithoutUuid[] => {
         
         // 设置特定人员的姓名
         let name = uid
-        if (uid === '5200001') {
+        if (uid === '5200097') {
             name = '周叶'
-        } else if (uid === '5200002') {
+        } else if (uid === '5200295') {
             name = '李月梅'
-        } else if (uid === '5200003') {
+        } else if (uid === '5200199') {
             name = '叶欢欢'
         }
         

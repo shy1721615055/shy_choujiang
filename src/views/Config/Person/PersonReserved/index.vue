@@ -186,7 +186,7 @@ const tableColumns = [
     </CustomDialog>
 
     <div class="min-w-1000px">
-        <PageHeader title="内定管理">
+        <PageHeader title="人员奖品管理">
             <template #buttons>
                 <div class="flex gap-3">
                     <button class="btn btn-success btn-sm" @click="showAddReservedDialog">

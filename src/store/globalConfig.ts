@@ -13,7 +13,7 @@ export const useGlobalConfig = defineStore('global', {
                 topTitle: i18n.global.t('data.defaultTitle'),
                 language: browserLanguage,
                 definiteTime: null as number | null,
-                winMusic: false,
+                winMusic: true,
                 theme: {
                     name: 'dracula',
                     detail: { primary: '#0f5fd3' },
@@ -288,7 +288,7 @@ export const useGlobalConfig = defineStore('global', {
         reset() {
             this.globalConfig = {
                 rowCount: 17,
-                winMusic: false,
+                winMusic: true,
                 isSHowPrizeList: true,
                 isShowAvatar: false,
                 topTitle: i18n.global.t('data.defaultTitle'),
